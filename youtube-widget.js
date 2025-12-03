@@ -1,5 +1,6 @@
 /**
  * دالة التحميل الرئيسية التي تجلب كود HTML من GitHub وتقوم بتشغيل الأداة.
+ * (تم تحديثها لجلب HTML مباشرةً دون استخدام بروكسي خارجي)
  * @param {string} channelId - معرف قناة يوتيوب.
  * @param {string} containerSelector - محدد CSS للحاوية التي سيتم حقن الكود فيها.
  */
@@ -10,23 +11,24 @@ window.loadYouTubeWidgetAndInit = function(channelId, containerSelector) {
         return;
     }
 
-    // رابط HTML الخاص بالبنية الهيكلية للأداة
+    // رابط HTML الخاص بالبنية الهيكلية للأداة (عبر jsDelivr)
     const HTML_FILE_URL = 'https://cdn.jsdelivr.net/gh/modweeb-widget/youtube-feed-widget@main/youtube-widget.html';
-    // نستخدم البروكسي للتغلب على مشاكل CORS عند جلب الملفات
-    const CORS_PROXY = 'https://api.allorigins.win/get?url=';
-    const proxyUrl = CORS_PROXY + encodeURIComponent(HTML_FILE_URL);
 
     // رسالة تحميل مؤقتة
     container.innerHTML = `<div style="text-align: center; padding: 20px;">جاري تحميل مكونات الأداة...</div>`;
 
-    fetch(proxyUrl)
-        .then(response => response.json())
-        .then(data => {
-            if (!data.contents) {
-                throw new Error("Failed to fetch HTML content from proxy.");
+    // 🌟 جلب الملف مباشرةً
+    fetch(HTML_FILE_URL) 
+        .then(response => {
+            if (!response.ok) {
+                // إظهار رسالة خطأ إذا كان حالة HTTP غير ناجحة (مثل 404)
+                throw new Error(`HTTP error! status: ${response.status}`);
             }
+            return response.text(); // جلب المحتوى النصي الخام
+        })
+        .then(htmlContent => {
             // 1. حقن كود HTML في الحاوية الفارغة
-            container.innerHTML = data.contents;
+            container.innerHTML = htmlContent;
 
             // 2. تشغيل دالة التمهيد الرئيسية باستخدام الـ channelId
             if (typeof window.initYouTubeWidget === 'function') {
@@ -37,12 +39,10 @@ window.loadYouTubeWidgetAndInit = function(channelId, containerSelector) {
         })
         .catch(error => {
             console.error('YouTube Widget Loader: Error fetching HTML:', error);
-            container.innerHTML = `<div style="text-align: center; padding: 20px; color: #ff0000; font-weight: bold;">عذراً، حدث خطأ في تحميل الأداة (HTML). يرجى التأكد من الروابط على GitHub.</div>`;
+            container.innerHTML = `<div style="text-align: center; padding: 20px; color: #ff0000; font-weight: bold;">عذراً، حدث خطأ في تحميل الأداة (HTML). يرجى التأكد من الروابط على GitHub. (خطأ: ${error.message})</div>`;
         });
 };
-
 // **ملاحظة:** يجب أن يأتي باقي الكود البرمجي لدالة initYouTubeWidget() بعد هذه الدالة في نفس الملف.
-
 
 (function() {
     // ------------------------------------------
@@ -562,4 +562,5 @@ window.loadYouTubeWidgetAndInit = function(channelId, containerSelector) {
     if(zoomInButton) zoomInButton.style.display = 'none';
 
 })();
+
 
