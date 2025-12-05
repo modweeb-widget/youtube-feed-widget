@@ -1,21 +1,6 @@
   /* -------------------------------------- */
     /* التنسيقات العامة */
     /* -------------------------------------- */
-    :root {
-  --linkC: #0ea5a4; 
-  --white: #ffffff;
-  --bodyC: #64748b; 
-  --bodyB: #f8fafc; 
-  --headC: #0f172a; 
-  --contentL: #e2e8f0; 
-  --contentB: #ffffff; 
-  --greetR: 12px;
-  --thumbEr: 8px;
-  --linkR: 6px;
-  --bs-1: 0 3px 9px -2px rgba(0,0,0,.1);
-  --trans-3: 0.3s;
-  --resetC: #ef4444; 
-}
     .BoxTool {
         position: relative;
         padding: 13px;
@@ -544,4 +529,5 @@
             width: 180px; 
             height: 101.25px; 
         }
+
     }
