@@ -27,14 +27,6 @@
       box-sizing: border-box;
     }
     
-    .yt-widget {
-      max-width: 100%;
-      font-family: inherit, sans-serif; 
-      color: var(--bodyC);
-      background: transparent;
-      padding: 0;
-    }
-
     /* محدد التخطيط و الأزرار */
     .yt-controls-bar {
         display: flex;
@@ -531,3 +523,4 @@
         }
 
     }
+
